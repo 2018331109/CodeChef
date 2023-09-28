@@ -1,0 +1,94 @@
+STATEMENT
+You are given an array A of length N containing distinct integers and an integer K (either 0 or 1).
+Your task is to find the total number of permutations of array A such that for all pairs (i,j) with 1≤i<j≤N, 
+and (i+j) being an odd number: (Ai+Aj)%2=K 
+You should output the count of such permutations modulo 10^9+7.
+
+SOLUTION
+#include <bits/stdc++.h>
+using namespace std;
+
+#define pb push_back
+#define int long long
+const int mod = 1e9 + 7;
+
+void solve()
+{
+    int n, k;
+    cin>>n>>k;
+    vector<int>v(n), fact(n+1);
+
+    int even=0, odd=0;
+    for(int i=0; i<n; i++)
+    {
+        cin>>v[i];
+        if(v[i]%2)
+        {
+            odd++;
+        }
+        else
+        {
+            even++;
+        }
+    }
+
+    if(n==1)
+    {
+        cout<<1<<endl;
+        return;
+    }
+    fact[0]=1;
+
+    for(int i=1; i<=n; i++)
+    {
+        fact[i] = ((fact[i-1])%mod*(i)%mod)%mod;
+    }
+
+    if(k==0)
+    {
+        if(even==0 && odd==n)
+        {
+            cout<<fact[n]%mod<<endl;
+            return;
+        }
+        else if(even==n && odd==0)
+        {
+            cout<<fact[n]%mod<<endl;
+            return;
+        }
+        else
+        {
+            cout<<"0"<<endl;
+            return;
+        }
+    }
+    else
+    {
+        if(abs(odd-even)>1)
+        {
+            cout<<"0"<<endl;
+            return;
+        }
+        else
+        {
+            int ans = (odd==even)?2:1;
+            ans=(ans*(fact[even]))%mod;
+            ans=(ans*(fact[odd]))%mod;
+            //ans = (((ans*fact[even])%mod)*fact[odd])%mod;
+            cout<<ans<<"\n";
+            return;
+        }
+    }
+}
+
+signed main()
+{
+    int test = 1;
+    cin >> test;
+    for (int t = 1; t <= test; t++)
+    {
+        solve();
+    }
+    return 0;
+}
+
